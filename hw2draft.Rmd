@@ -86,3 +86,10 @@ trans_ent %>%
   select(station_name, line) %>% 
   distinct
 ```
+
+### Problem 2
+
+```{r}
+
+```
+
