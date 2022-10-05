@@ -269,3 +269,42 @@ Data summary
 -   The total number of sports balls collected by Mr Trash is 856
 
 ### Problem 3
+
+``` r
+pols_ds = read_csv(
+    "data/fivethirtyeight_datasets/pols-month.csv") %>%
+  janitor::clean_names() %>%
+  separate(col=mon, into = c("year", "month", "day"), sep ='-', convert = TRUE) %>%
+  mutate(month = month.abb[month],
+         president = case_when (prez_gop == 1 ~ "gop", prez_dem == 1 ~ "dem")) %>%
+  select(-prez_gop, -prez_dem, -day)
+```
+
+``` r
+snp_ds = read_csv(
+    "data/fivethirtyeight_datasets/snp.csv") %>%
+  janitor::clean_names() %>%
+  separate(col= date, into = c("month", "day", "year"), sep ='/', convert = TRUE) %>%
+  mutate(month = month.abb[month],
+         year = ifelse(year > 49, year + 1900, year + 2000)) %>%
+select(-day) %>%
+  select (year, month, everything())
+```
+
+``` r
+unemploy_ds = read_csv(
+    "data/fivethirtyeight_datasets/unemployment.csv") %>%
+  janitor::clean_names() %>%
+  pivot_longer (jan:dec,
+names_to = "month",
+values_to = "unemployment")
+  
+```
+
+``` r
+pomo_snp = left_join(pols_ds, snp_ds)
+```
+
+``` r
+pomosnp_unemp = left_join(pomo_snp,unemploy_ds)
+```
