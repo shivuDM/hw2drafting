@@ -207,7 +207,7 @@ merged_trash = bind_rows (trash_W1, prof_W2) %>%
   janitor::clean_names()
 ```
 
-Desription of the dataset post merging:
+Description of the data set post merging:
 
 |                                                  |              |
 |:-------------------------------------------------|:-------------|
@@ -297,7 +297,8 @@ unemploy_ds = read_csv(
   janitor::clean_names() %>%
   pivot_longer (jan:dec,
 names_to = "month",
-values_to = "unemployment")
+values_to = "unemployment") %>%
+  mutate (month = str_to_title(month))
   
 ```
 
