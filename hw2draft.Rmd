@@ -124,7 +124,7 @@ merged_trash = bind_rows (trash_W1, prof_W2) %>%
   janitor::clean_names()
 ```
 
-Description of the data set post merging:
+* Description of the data set post merging:
 
 `r skimr:: skim(merged_trash)`
 
@@ -178,4 +178,11 @@ pomo_snp = left_join(pols_ds, snp_ds)
 ```{r}
 pomosnp_unemp = left_join(pomo_snp,unemploy_ds)
 ```
+
+* Summary of the combined data set
+
+`r skimr:: skim(pomosnp_unemp)`
+
+- the merged data set has `r nrow(pomosnp_unemp)` observations and `r ncol(pomosnp_unemp)` variables.
+
 

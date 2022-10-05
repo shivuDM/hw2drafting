@@ -207,7 +207,7 @@ merged_trash = bind_rows (trash_W1, prof_W2) %>%
   janitor::clean_names()
 ```
 
-Description of the data set post merging:
+-   Description of the data set post merging:
 
 |                                                  |              |
 |:-------------------------------------------------|:-------------|
@@ -309,3 +309,42 @@ pomo_snp = left_join(pols_ds, snp_ds)
 ``` r
 pomosnp_unemp = left_join(pomo_snp,unemploy_ds)
 ```
+
+-   Summary of the combined data set
+
+|                                                  |               |
+|:-------------------------------------------------|:--------------|
+| Name                                             | pomosnp_unemp |
+| Number of rows                                   | 822           |
+| Number of columns                                | 11            |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_   |               |
+| Column type frequency:                           |               |
+| character                                        | 2             |
+| numeric                                          | 9             |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |               |
+| Group variables                                  | None          |
+
+Data summary
+
+**Variable type: character**
+
+| skim_variable | n_missing | complete_rate | min | max | empty | n_unique | whitespace |
+|:--------------|----------:|--------------:|----:|----:|------:|---------:|-----------:|
+| month         |         0 |          1.00 |   3 |   3 |     0 |       12 |          0 |
+| president     |         5 |          0.99 |   3 |   3 |     0 |        2 |          0 |
+
+**Variable type: numeric**
+
+| skim_variable | n_missing | complete_rate |    mean |     sd |      p0 |     p25 |     p50 |     p75 |    p100 | hist  |
+|:--------------|----------:|--------------:|--------:|-------:|--------:|--------:|--------:|--------:|--------:|:------|
+| year          |         0 |          1.00 | 1980.75 |  19.79 | 1947.00 | 1964.00 | 1981.00 | 1998.00 | 2015.00 | ▇▇▇▇▇ |
+| gov_gop       |         0 |          1.00 |   22.48 |   5.68 |   12.00 |   18.00 |   22.00 |   28.00 |   34.00 | ▆▆▇▅▅ |
+| sen_gop       |         0 |          1.00 |   46.10 |   6.38 |   32.00 |   42.00 |   46.00 |   51.00 |   56.00 | ▃▃▇▇▇ |
+| rep_gop       |         0 |          1.00 |  194.92 |  29.24 |  141.00 |  176.00 |  195.00 |  222.00 |  253.00 | ▃▇▆▃▅ |
+| gov_dem       |         0 |          1.00 |   27.20 |   5.94 |   17.00 |   22.00 |   28.00 |   32.00 |   41.00 | ▆▅▇▆▂ |
+| sen_dem       |         0 |          1.00 |   54.41 |   7.37 |   44.00 |   48.00 |   53.00 |   58.00 |   71.00 | ▇▆▇▃▂ |
+| rep_dem       |         0 |          1.00 |  244.97 |  31.37 |  188.00 |  211.00 |  250.00 |  268.00 |  301.00 | ▇▂▇▇▅ |
+| close         |        36 |          0.96 |  472.85 | 543.29 |   17.05 |   83.67 |  137.26 |  932.06 | 2107.39 | ▇▁▂▁▁ |
+| unemployment  |        12 |          0.99 |    5.83 |   1.65 |    2.50 |    4.70 |    5.60 |    6.90 |   10.80 | ▃▇▅▂▁ |
+
+-   the merged data set has 822 observations and 11 variables.
