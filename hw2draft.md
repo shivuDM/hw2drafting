@@ -28,7 +28,7 @@ be used in later parts fo this problem. We update `entry` from `yes` /
 ``` r
 trans_ent = 
   read_csv(
-    "hw2draft_files/NYC_Transit_Subway_Entrance_And_Exit_Data.csv",
+    "data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv",
     col_types = cols(Route8 = "c", Route9 = "c", Route10 = "c", Route11 = "c")) %>% 
   janitor::clean_names() %>% 
   select(
@@ -67,6 +67,8 @@ trans_ent %>%
 ## # … with 455 more rows
 ```
 
+-   There are 465 distinct stations.
+
 The next code chunk is similar, but filters according to ADA compliance
 as an initial step. This produces a dataframe in which the number of
 rows is the number of ADA compliant stations.
@@ -92,6 +94,8 @@ trans_ent %>%
 ## # … with 74 more rows
 ```
 
+-   There are 84 distinct stations, that are ADA compliant.
+
 To compute the proportion of station entrances / exits without vending
 allow entrance, we first exclude station entrances that do not allow
 vending. Then, we focus on the `entry` variable – this logical, so
@@ -105,6 +109,9 @@ trans_ent %>%
   mean
 ## [1] 0.3770492
 ```
+
+-   the proportion of station entrances / exits without vending allow
+    entrance is 0.38.
 
 Lastly, we write a code chunk to identify stations that serve the A
 train, and to assess how many of these are ADA compliant. As a first
@@ -167,3 +174,98 @@ trans_ent %>%
 ## 16 Franklin Av                   Fulton          
 ## 17 Howard Beach                  Rockaway
 ```
+
+-   There are 60 distinct stations, that serve the A train.
+-   There are 17 distinct stations, that serve the A train and are ADA
+    compliant.
+
+### Problem 2
+
+``` r
+trash_W1 = 
+  readxl::read_excel("data/Trash Wheel Collection Data.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N549") %>%
+  janitor::clean_names() %>%
+mutate (
+        sports_balls = as.integer(sports_balls),
+        wheel = "mrtrash")
+```
+
+Now, I will repeat the same for Professor data
+
+``` r
+prof_W2 = 
+  read_excel("data/Trash Wheel Collection Data.xlsx", sheet = "Professor Trash Wheel", range = "A2:M96") %>%
+  janitor::clean_names() %>%
+mutate (year = as.character(year),
+       wheel = "proftrash" )
+```
+
+Combining the both data sets:
+
+``` r
+merged_trash = bind_rows (trash_W1, prof_W2) %>%
+  janitor::clean_names()
+```
+
+Desription of the dataset post merging:
+
+|                                                  |              |
+|:-------------------------------------------------|:-------------|
+| Name                                             | merged_trash |
+| Number of rows                                   | 641          |
+| Number of columns                                | 15           |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_   |              |
+| Column type frequency:                           |              |
+| character                                        | 3            |
+| numeric                                          | 11           |
+| POSIXct                                          | 1            |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |              |
+| Group variables                                  | None         |
+
+Data summary
+
+**Variable type: character**
+
+| skim_variable | n_missing | complete_rate | min | max | empty | n_unique | whitespace |
+|:--------------|----------:|--------------:|----:|----:|------:|---------:|-----------:|
+| month         |         0 |             1 |   3 |   9 |     0 |       13 |          0 |
+| year          |         0 |             1 |   4 |   4 |     0 |        9 |          0 |
+| wheel         |         0 |             1 |   7 |   9 |     0 |        2 |          0 |
+
+**Variable type: numeric**
+
+| skim_variable      | n_missing | complete_rate |     mean |       sd |     p0 |     p25 |     p50 |      p75 |      p100 | hist  |
+|:-------------------|----------:|--------------:|---------:|---------:|-------:|--------:|--------:|---------:|----------:|:------|
+| dumpster           |         0 |          1.00 |   240.78 |   166.88 |   1.00 |   81.00 |  227.00 |   387.00 |    547.00 | ▇▅▅▅▅ |
+| weight_tons        |         0 |          1.00 |     3.02 |     0.84 |   0.61 |    2.48 |    3.08 |     3.62 |      5.62 | ▁▅▇▅▁ |
+| volume_cubic_yards |         0 |          1.00 |    15.22 |     1.44 |   6.00 |   15.00 |   15.00 |    15.00 |     20.00 | ▁▁▁▇▁ |
+| plastic_bottles    |         0 |          1.00 |  2464.81 |  1817.94 | 210.00 | 1110.00 | 2110.00 |  3100.00 |   9830.00 | ▇▆▁▁▁ |
+| polystyrene        |         0 |          1.00 |  2088.81 |  1990.25 |  48.00 |  780.00 | 1460.00 |  2870.00 |  11528.00 | ▇▃▁▁▁ |
+| cigarette_butts    |         0 |          1.00 | 19663.80 | 28187.00 | 900.00 | 4400.00 | 8000.00 | 23000.00 | 310000.00 | ▇▁▁▁▁ |
+| glass_bottles      |         0 |          1.00 |    20.71 |    15.82 |   0.00 |    9.00 |   18.00 |    28.00 |    110.00 | ▇▃▁▁▁ |
+| grocery_bags       |         0 |          1.00 |  1217.66 |  1634.36 |  24.00 |  360.00 |  780.00 |  1480.00 |  13450.00 | ▇▁▁▁▁ |
+| chip_bags          |         0 |          1.00 |  2405.54 |  3050.01 | 180.00 |  800.00 | 1340.00 |  2684.00 |  20100.00 | ▇▁▁▁▁ |
+| sports_balls       |        94 |          0.85 |    12.56 |     9.28 |   0.00 |    6.00 |   11.00 |    18.00 |     56.00 | ▇▅▂▁▁ |
+| homes_powered      |        73 |          0.89 |    44.11 |    20.73 |   0.00 |   34.67 |   49.00 |    57.50 |     93.67 | ▂▃▇▅▁ |
+
+**Variable type: POSIXct**
+
+| skim_variable | n_missing | complete_rate | min        | max        | median     | n_unique |
+|:--------------|----------:|--------------:|:-----------|:-----------|:-----------|---------:|
+| date          |         0 |             1 | 1900-01-20 | 2022-07-29 | 2018-08-09 |      359 |
+
+-   The total number of rows are 641 and the total number of variables
+    are 15
+-   There are 3 character variables, 11 numeric variables and 1 date
+    variable
+-   The main variables in the dataset are weight of the trash (in tons),
+    volume of the trash (in cubic yards) and the amount of various types
+    of trash collected like plastic bottles, chips bags, cigarette
+    butts, glass bottles, sports balls, polystyrene), the homes powered,
+    and the distribution by names (Mr and Prof Trash).
+-   The total weight of trash collected combined is 1938.48 tons
+-   The total weight of trash collected by Professor Trash is 190.12
+    tons
+-   The total number of sports balls collected by Mr Trash is 856
+
+### Problem 3

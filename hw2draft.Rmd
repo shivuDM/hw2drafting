@@ -27,7 +27,7 @@ Below we import and clean data from `NYC_Transit_Subway_Entrance_And_Exit_Data.c
 ```{r}
 trans_ent = 
   read_csv(
-    "hw2draft_files/NYC_Transit_Subway_Entrance_And_Exit_Data.csv",
+    "data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv",
     col_types = cols(Route8 = "c", Route9 = "c", Route10 = "c", Route11 = "c")) %>% 
   janitor::clean_names() %>% 
   select(
@@ -47,6 +47,8 @@ trans_ent %>%
   distinct
 ```
 
+* There are 465 distinct stations.
+
 The next code chunk is similar, but filters according to ADA compliance as an initial step. This produces a dataframe in which the number of rows is the number of ADA compliant stations. 
 
 ```{r}
@@ -56,6 +58,8 @@ trans_ent %>%
   distinct
 ```
 
+* There are 84 distinct stations, that are ADA compliant.
+
 To compute the proportion of station entrances / exits without vending allow entrance, we first exclude station entrances that do not allow vending. Then, we focus on the `entry` variable -- this logical, so taking the mean will produce the desired proportion (recall that R will coerce logical to numeric in cases like this).
 
 ```{r}
@@ -64,6 +68,8 @@ trans_ent %>%
   pull(entry) %>% 
   mean
 ```
+
+* the proportion of station entrances / exits without vending allow entrance is 0.38.
 
 Lastly, we write a code chunk to identify stations that serve the A train, and to assess how many of these are ADA compliant. As a first step, we tidy the data as alluded to previously; that is, we convert `route` from wide to long format. After this step, we can use tools from previous parts of the question (filtering to focus on the A train, and on ADA compliance; selecting and using `distinct` to obtain dataframes with the required stations in rows).
 
@@ -87,9 +93,48 @@ trans_ent %>%
   distinct
 ```
 
+* There are 60 distinct stations, that serve the A train.
+* There are 17 distinct stations, that serve the A train and are ADA compliant.
+
+
 ### Problem 2
 
-```{r}
-
+```{r Mr Trash}
+trash_W1 = 
+  readxl::read_excel("data/Trash Wheel Collection Data.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N549") %>%
+  janitor::clean_names() %>%
+mutate (
+        sports_balls = as.integer(sports_balls),
+        wheel = "mrtrash")
 ```
+
+Now, I will repeat the same for Professor data
+
+```{r Prof Trash}
+prof_W2 = 
+  read_excel("data/Trash Wheel Collection Data.xlsx", sheet = "Professor Trash Wheel", range = "A2:M96") %>%
+  janitor::clean_names() %>%
+mutate (year = as.character(year),
+       wheel = "proftrash" )
+```
+
+Combining the both data sets:
+```{r combining}
+merged_trash = bind_rows (trash_W1, prof_W2) %>%
+  janitor::clean_names()
+```
+
+Desription of the dataset post merging:
+
+`r skimr:: skim(merged_trash)`
+
+- The total number of rows are `r nrow(merged_trash)` and the total number of variables are `r ncol(merged_trash)`
+- There are 3 character variables, 11 numeric variables and 1 date variable 
+- The main variables in the dataset are weight of the trash (in tons), volume of the trash (in cubic yards) and the amount of various types of trash collected like plastic bottles, chips bags, cigarette butts, glass bottles, sports balls, polystyrene), the homes powered, and the distribution by names (Mr and Prof Trash).
+- The total weight of trash collected combined is `r sum(merged_trash$weight_tons, na.rm = TRUE)` tons
+- The total weight of trash collected by Professor Trash is `r sum(prof_W2$weight_tons, na.rm = TRUE)` tons
+- The total number of sports balls collected by Mr Trash is `r sum(merged_trash[which(merged_trash$year == "2020" & merged_trash$wheel == "mrtrash"), "sports_balls"])`
+
+
+### Problem 3
 
